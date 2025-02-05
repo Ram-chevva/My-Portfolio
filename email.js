@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+// Create transporter
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -8,16 +9,16 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const sendEmail = async ({ to, subject, text }) => {
+// Email sending function
+const sendEmail = async (mailOptions) => {
   try {
     await transporter.sendMail({
       from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to,
-      subject,
-      text
+      ...mailOptions
     });
+    console.log('Email sent successfully');
   } catch (error) {
-    console.error('Email send error:', error);
+    console.error('Email error:', error);
   }
 };
 
