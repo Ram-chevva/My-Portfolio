@@ -7,36 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-          e.preventDefault(); // prevent the default form submission
-          const formData = {
-            name: this.querySelector('input[name="name"]').value,
-            email: this.querySelector('input[name="email"]').value,
-            message: this.querySelector('textarea[name="message"]').value
-          };
-      
-          fetch(this.action, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-          })
-          .then(response => {
-            if (response.ok) {
-              alert("Message sent successfully!");
-              this.reset();
-            } else {
-              alert("There was an error sending your message.");
-            }
-          })
-          .catch(error => {
-            console.error("Error:", error);
-            alert("There was an error sending your message.");
-          });
-        });
-      </script>
 </head>
 <body>
     <header class="header">
@@ -151,6 +121,36 @@
                 <h2 class="section__title">Projects</h2>
                 <div class="projects__grid">
                     <div class="project__card">
+                        <h3 class="project__title">Sitting Posture Detection Using FMCW Audio Signals</h3>
+                        <p class="project__description">
+                            This project aims to detect a user's sitting posture using sound waves instead of cameras or wearable sensors. 
+                            By transmitting FMCW (Frequency-Modulated Continuous Wave) audio signals from a laptop’s speaker and capturing 
+                            the reflections through a microphone, the system analyzes how sound waves interact with the user's body to 
+                            classify different postures.
+                        </p>
+                        <h3><strong>How It Works:</strong></h3>
+                        <ul>
+                            <li>A laptop sends FMCW signals via the speaker.</li>
+                            <li>The microphone records reflections from the user's body.</li>
+                            <li>Signal processing techniques remove noise and interference.</li>
+                            <li>K-Means clustering classifies sitting postures.</li>
+                        </ul>
+                        <h3><strong>Key Features:</strong></h3>
+                        <ul>
+                            <li><strong>Privacy-focused:</strong> No cameras or external sensors required.</li>
+                            <li><strong>Fully software-based:</strong> Uses only a laptop’s built-in speaker & microphone.</li>
+                            <li><strong>Real-time analysis:</strong> Detects and classifies postures dynamically.</li>
+                            <li><strong>Potential for IoT integration:</strong> Can be extended for ergonomic monitoring.</li>
+                        </ul>
+                        <br>
+                        <a href="https://github.com/Ram-chevva/sitting-posture-detection" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="30" height="30">
+                            <span style="font-size: 18px; font-weight: bold; color: #333;"></span>
+                        </a>
+                        
+                        </div>
+                <div class="projects__grid">
+                    <div class="project__card">
                         <h3 class="project__title">Contoso Pizza Web App</h3>
                         <p class="project__description">
                             The Contoso Pizza Web Application is an interactive platform for seamless online pizza ordering. It allows users to browse the menu, customize orders, manage their cart, and complete secure transactions.
@@ -238,7 +238,7 @@
     <a href="mailto:ramlingaredd2k@gmail.com" class="email-link">ramlingaredd2k@gmail.com</a> 
     or through this form:
 </p> <br>
-                <form class="contact__form" id="contactForm" action="https://formspree.io/f/xwpvbgwv" method="POST">
+                <form class="contact__form" id="contactForm">
                     <div class="form__group">
                         <input type="text" placeholder="Name" class="form__input" required>
                     </div>
@@ -250,6 +250,39 @@
                     </div>
                     <button type="submit" class="form__button">Send Message</button>
                 </form>
+                <script>
+  document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      message: e.target.message.value
+    };
+
+    try {
+      const response = await fetch('/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+      const messageEl = document.getElementById('formMessage');
+
+      if (result.success) {
+        messageEl.textContent = 'Message sent successfully!';
+        messageEl.style.color = 'green';
+        e.target.reset();
+      } else {
+        messageEl.textContent = result.error || 'Error sending message';
+        messageEl.style.color = 'red';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+</script>
             </div>
         </section>
     </main>
