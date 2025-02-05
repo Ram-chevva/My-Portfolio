@@ -1,9 +1,10 @@
 const sqlite3 = require('sqlite3').verbose();
 
+// Connect to SQLite database
 const db = new sqlite3.Database('./messages.db', (err) => {
   if (err) return console.error(err.message);
-  console.log('Connected to SQLite database');
   
+  // Create messages table
   db.run(`CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -13,4 +14,4 @@ const db = new sqlite3.Database('./messages.db', (err) => {
   )`);
 });
 
-module.exports = db;
+module.exports = { db };
