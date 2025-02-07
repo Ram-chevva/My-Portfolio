@@ -1,87 +1,41 @@
 const express = require('express');
-const helmet = require('helmet');
-const compression = require('compression');
-const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const emailHandler = require('./email'); // Ensure email.js exists
+
 const app = express();
 
-// Environment configuration
-const port = process.env.PORT || 5500;
-const isProduction = process.env.NODE_ENV === 'production';
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
 
-// Security middleware
-app.use(helmet());
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-    fontSrc: ["'self'", "https://fonts.gstatic.com"],
-    imgSrc: ["'self'", "data:"],
-    connectSrc: ["'self'"]
-  }
-}));
+// Serve static files from the 'public' folder (or change to your actual folder)
+app.use(express.static(__dirname + '/public'));
 
-// Performance optimization
-app.use(compression());
-
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: isProduction ? 31536000000 : 0, // 1 year in production
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-    if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
-
-// Force HTTPS in production
-if (isProduction) {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`);
-    } else {
-      next();
-    }
-  });
-}
-
-// Main route
+// Default route to serve index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-// Error handling middleware
-app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+// Contact Form Route
+app.post('/contact', async (req, res) => {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ success: false, error: 'All fields are required' });
+    }
+
+    try {
+        // Send email with form data
+        await emailHandler.sendEmail(name, email, message);
+
+        res.json({ success: true, message: 'Message sent successfully!' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ success: false, error: 'Error sending message' });
+    }
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).sendFile(path.join(__dirname, 'public', '500.html'));
-});
-
-// Start server
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server running in ${isProduction ? 'production' : 'development'} mode`);
-  console.log(`Listening on port ${port}`);
-});
-
-const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('./messages.db', (err) => {
-  if (err) return console.error(err.message);
-  console.log('Connected to SQLite database');
-  
-  db.run(`CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-});
-
-module.exports = db;
+// Start Server
+const PORT = process.env.PORT || 5501;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
