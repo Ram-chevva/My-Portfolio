@@ -1,7 +1,7 @@
 {
   "name": "ram-chevva",
   "version": "1.0.0",
-  "description": "<!--\r **Ram-chevva/Ram-Chevva** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.",
+  "description": "Ram-chevva's portfolio repository",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ram-chevva/My-Portfolio"
+    "url": "https://github.com/Ram-chevva/My-Portfolio.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ram Chevva",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Ram-chevva/My-Portfolio/issues"
