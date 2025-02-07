@@ -64,18 +64,36 @@ body {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 50px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(10px);
 }
 
 .nav__link {
+    position: relative;
     padding: 0.5rem 1rem;
     color: var(--primary-color);
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--secondary-color);
+    transition: width 0.3s ease;
+}
+
+.nav__link:hover::after {
+    width: 100%;
+}
+
 .nav__link:hover {
     color: var(--secondary-color);
 }
+
 
 /* Hero Section */
 .hero {
@@ -87,18 +105,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 5rem;
     flex-wrap: wrap;
+}
+
+.hero__left {
+    flex: 1;
 }
 
 .hero__title {
     font-size: 3rem;
     color: var(--primary-color);
+     margin-bottom: 1rem;
 }
 
 .hero__subtitle {
     font-size: 1.5rem;
     color: var(--secondary-color);
+   margin-bottom: 1.5rem;  
 }
 
 .hero__description {
@@ -108,8 +132,8 @@ body {
 }
 
 .hero__image {
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--secondary-color);
@@ -126,6 +150,7 @@ body {
 .social-link {
     font-size: 1.5rem;
     color: var(--primary-color);
+    transition: color 0.3s;
 }
 
 .social-link:hover {
@@ -136,30 +161,74 @@ body {
 .experience__grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Side-by-side on large screens */
     margin-top: 3rem;
 }
 
+.experience__card {
+    background: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.experience__role {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.experience__company {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.experience__duration {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.experience__list {
+    padding-left: 1.5rem;
+}
+
+.experience__list li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.experience__list li::before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+}
+
 /* Skills Section */
+.skills {
+    padding: 5rem 0;
+}
+
 .skills__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Each skill in a separate box */
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.2rem;
     margin-top: 2rem;
 }
 
 .skill__item {
     background: var(--card-background);
-    padding: 2rem; /* Larger padding for better spacing */
-    border-radius: 12px;
+    padding: 2rem;
+    border-radius: 10px;
     text-align: center;
-    font-weight: 600; /* Slightly heavier font weight */
+    font-weight: 600; 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .skill__item:hover {
-    transform: translateY(-5px); /* Slightly more prominent hover effect */
+    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -173,11 +242,59 @@ body {
 }
 
 /* Education Section */
-.education__grid, .projects__grid {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.education__card {
+    background: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
 }
+
+.education__header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 1rem;
+}
+
+.education__degree {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.education__university {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.education__duration {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.education__list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.education__item {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.education__icon {
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    width: 2rem;
+    text-align: center;
+}
+
 
 /* Contact Section */
 .contact {
